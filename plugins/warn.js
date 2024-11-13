@@ -1,68 +1,120 @@
-const config = require('../config')
-const {
-  bot,
-  setWarn,
-  jidToNum,
-  // genButtonMessage,
-  isAdmin,
-  deleteWarn,
-} = require('../lib/')
-
-bot(
-  {
-    pattern: 'warn ?(.*)',
-    desc: 'warn users in chat',
-    type: 'group',
-    onlyGroup: true,
-  },
-  async (message, match) => {
-    if (!match && !message.reply_message)
-      return await message.send('*Example :*\nwarn mention/reply\nwarn reset mention/reply')
-    let [m, u] = match.split(' ')
-    if (m && m.toLowerCase() == 'reset') {
-      u = u && u.endsWith('@s.whatsapp.net') ? u : message.mention[0] || message.reply_message.jid
-      if (!u) return await message.send('*Reply or Mention to a user*')
-      const count = await setWarn(u, message.jid, (!isNaN(u) && u) || -1)
-      const mention = `@${jidToNum(u)}`
-      const remaining = config.WARN_LIMIT - count
-      const resetMessage = config.WARN_RESET_MESSAGE.replace('&mention', mention)
-        .replace('&remaining', remaining)
-        .replace('&warn', config.WARN_LIMIT)
-      return await message.send(resetMessage, { contextInfo: { mentionedJid: [u] } })
-    }
-    const user = message.mention[0] || message.reply_message.jid
-    if (!user) return await message.send('*Reply or Mention to a user*')
-    const count = await setWarn(user, message.jid)
-    if (count > config.WARN_LIMIT) {
-      const participants = await message.groupMetadata(message.jid)
-      const isImAdmin = await isAdmin(participants, message.client.user.jid)
-      if (!isImAdmin) return await message.send(`_I'm not admin._`)
-      const isUserAdmin = await isAdmin(participants, user)
-      if (isUserAdmin) return await message.send(`_I can't Remove admin._`)
-      const mention = `@${jidToNum(user)}`
-      const kickMessage = config.WARN_KICK_MESSAGE.replace('&mention', mention)
-      await message.send(kickMessage, {
-        contextInfo: { mentionedJid: [user] },
-      })
-      await deleteWarn(user, message.jid)
-      return await message.Kick(user)
-    }
-    const mention = `@${jidToNum(user)}`
-    const remainWarnCount = config.WARN_LIMIT - count
-    const warnMessage = config.WARN_MESSAGE.replace('&mention', mention)
-      .replace('&remaining', remainWarnCount)
-      .replace('&reason', match)
-      .replace('&warn', config.WARN_LIMIT)
-    await message.send(warnMessage, { contextInfo: { mentionedJid: [user] } })
-    // return await message.send(
-    // 	await genButtonMessage(
-    // 		[{ id: `warn reset ${user}`, text: 'RESET' }],
-    // 		`⚠️WARNING⚠️\n*User :* @${jidToNum(
-    // 			user
-    // 		)}\n*Warn :* ${count}\n*Remaining :* ${config.WARN_LIMIT - count}`
-    // 	),
-    // 	{ contextInfo: { mentionedJid: [user] } },
-    // 	'button'
-    // )
+function checkLinks(links, allowedWords) {
+    let testArray = []
+    for (let i = 0; i < links.length; i++) {
+      const link = links[i];
+      let isAllowed = true;
+      for (let j = 0; j < allowedWords.length; j++) {
+        const allowedWord = allowedWords[j];
+        if (link.includes(allowedWord)) {
+          isAllowed = true; // Word is allowed
+          break;
+        }
+        isAllowed = false; // Word is not allowed
+      }
+      
+        testArray.push(isAllowed)
+      }
+    return testArray.includes(false)
   }
-)
+let {Module} = require('../main');
+let {ADMIN_ACCESS,WARN,ANTILINK_WARN,ANTIWORD_WARN} = require('../config');
+let {getString} = require('./misc/lang');
+const {Fancy} = require('raganork-bot')
+let {isAdmin} = require('./misc/misc');
+let {containsDisallowedWords} = require('./manage');
+let Lang = getString('group');
+let {setWarn,resetWarn,mentionjid} = require('./misc/misc');
+Module({pattern: 'warn ?(.*)', fromMe: false,use: 'group', desc:Lang.WARN_DESC}, (async (m, mat) => { 
+let adminAccesValidated = ADMIN_ACCESS ? await isAdmin(m,m.sender) : false;
+if (m.fromOwner || adminAccesValidated) {
+if (mat[1] === "reset") return await m.sendReply("*Wrong command! Use _.reset warn_*")
+if (m.message.includes(Lang.REMAINING)) return;
+var user = m.mention[0] || m.reply_message.jid
+if (!user) return await m.sendReply(Lang.NEED_USER)
+if (!m.jid.endsWith('@g.us')) return await m.sendReply(Lang.GROUP_COMMAND)
+await m.client.sendMessage(m.jid, { delete: m.quoted.key })
+var warn = await setWarn(m.jid,user,parseInt(WARN))
+var ms = 'Replied message';
+if (m.mention[0]) ms = 'Not defined'
+if (m.reply_message.audio) ms = 'Audio'
+if (m.reply_message.sticker) ms = 'Sticker'
+if (m.reply_message.text) ms = m.reply_message.text.length > 40 ? 'Replied message' : m.reply_message.text
+if (m.reply_message.video) ms = 'Video'
+if (m.reply_message.image) ms = 'Image'
+var reason = mat[1] ? mat[1].replace(mentionjid(user),"") : ms
+var msg = Lang.WARNING + '\n' +
+    Lang.USER.format(mentionjid(user))+ '\n' +
+    Lang.REASON.format(reason)+ '\n' +
+    Lang.REMAINING.format(warn) + '\n' 
+if (warn !== 0) {
+    return await m.client.sendMessage(m.jid, { text:msg,mentions:[user]},{ quoted: m.quoted || m.data })
+} else {
+    await m.client.sendMessage(m.jid,{text: Lang.WARN_OVER.format(WARN,mentionjid(user)), mentions: [user] })
+    await m.client.groupParticipantsUpdate(m.jid, [user], "remove")
+ }
+}}));
+Module({pattern: 'reset warn',use: 'group',fromMe: false, desc:'Resets the warn count of the user'}, (async (m, mat) => { 
+let adminAccesValidated = ADMIN_ACCESS ? await isAdmin(m,m.sender) : false;
+if (m.fromOwner || adminAccesValidated) {
+var user = m.mention[0] || m.reply_message.jid
+if (!user) return await m.sendReply(Lang.NEED_USER)
+if (!m.jid.endsWith('@g.us')) return await m.sendReply(Lang.GROUP_COMMAND)
+try { await resetWarn(m.jid,user) } catch { return await m.sendReply("error")}
+return await m.client.sendMessage(m.jid,{text:Lang.WARN_RESET.format(WARN,mentionjid(user)), mentions: [user] })
+}}));
+Module({on: 'text', fromMe: false}, (async (m, mat) => { 
+    if (ANTILINK_WARN?.split(",").includes(m.jid)){
+    if (/\bhttps?:\/\/\S+/gi.test(m.message)){
+    let allowed = (process.env.ALLOWED_LINKS || "gist,instagram,youtu").split(",");
+    let linksInMsg = m.message.match(/\bhttps?:\/\/\S+/gi)
+    if (checkLinks(linksInMsg,allowed)) {
+    var user = m.sender
+    var admin = await isAdmin(m,m.sender);
+    if (admin) return;
+    if (!user) return await m.sendReply(Lang.NEED_USER)
+    if (!m.jid.endsWith('@g.us')) return await m.sendReply(Lang.GROUP_COMMAND)
+    let warn = await setWarn(m.jid,user,parseInt(WARN))
+    let reason = "sent link";
+    let mentionedUser = m.senderName.split("\n").length > 1 ? '+'+user.split("@")[0] : mentionjid(user)
+    let msg = "_*⚠ Antilink warning ⚠*_\n" +
+    Lang.USER.format(mentionedUser)+ '\n' +
+    Lang.REASON.format(reason)+ '\n' +
+    Lang.REMAINING.format(warn) + '\n'; 
+    await m.client.sendMessage(m.jid, { delete: m.data.key })
+    if (warn !== 0) {
+        return await m.client.sendMessage(m.jid, { text: msg ,mentions:[user]},{ quoted: m.data })
+    } else {
+        await m.client.sendMessage(m.jid,{text: Lang.WARN_OVER.format(WARN,mentionjid(user)), mentions: [user] })
+        await m.client.groupParticipantsUpdate(m.jid, [user], "remove")
+          }
+        }   
+    }
+  } 
+  if (ANTIWORD_WARN?.split(",").includes(m.jid)){
+    let disallowedWords = (process.env.ANTI_WORDS || "nigga,fuck").split(",");
+    if (!process.env.ANTI_WORDS || process.env.ANTI_WORDS == 'auto') disallowedWords = require('badwords/array');
+    let thatWord = containsDisallowedWords(m.message,disallowedWords)
+    if (thatWord){
+      var user = m.sender
+      var admin = await isAdmin(m,m.sender);
+      if (admin) return;
+      if (!user) return await m.sendReply(Lang.NEED_USER)
+      if (!m.jid.endsWith('@g.us')) return await m.sendReply(Lang.GROUP_COMMAND)
+      let warn = await setWarn(m.jid,user,parseInt(WARN))
+      let reason = `"${thatWord}"`
+      let mentionedUser = m.senderName.split("\n").length > 1 ? '+'+user.split("@")[0] : mentionjid(user)
+      let msg = "_*⚠ Antiword warning ⚠*_\n" +
+      Lang.USER.format(mentionedUser)+ '\n' +
+      Lang.REASON.format(reason)+ '\n' +
+      Lang.REMAINING.format(warn) + '\n'; 
+      await m.client.sendMessage(m.jid, { delete: m.data.key })
+      if (warn !== 0) {
+          return await m.client.sendMessage(m.jid, { text: msg ,mentions:[user]},{ quoted: m.data })
+      } else {
+          await m.client.sendMessage(m.jid,{text: Lang.WARN_OVER.format(WARN,mentionjid(user)), mentions: [user] })
+          await m.client.groupParticipantsUpdate(m.jid, [user], "remove")
+            }                 
+    }
+
+  } 
+ }));
