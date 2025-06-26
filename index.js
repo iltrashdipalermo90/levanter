@@ -1,15 +1,23 @@
-const { default: makeWASocket } = require("@whiskeysockets/baileys");
+const {
+  default: makeWASocket,
+  useMultiFileAuthState,
+} = require("@whiskeysockets/baileys");
 const fs = require("fs");
 const path = require("path");
 const pino = require("pino");
 
 async function startBot() {
+  const { state, saveCreds } = await useMultiFileAuthState("./session");
+
   const sock = makeWASocket({
-    printQRInTerminal: true,
+    auth: state,
     logger: pino({ level: "silent" }),
+    printQRInTerminal: true,
   });
 
-  // Caricamento dei plugin dalla cartella /plugins
+  sock.ev.on("creds.update", saveCreds);
+
+  // Carica i plugin dalla cartella /plugins
   const pluginFolder = path.join(__dirname, "plugins");
   fs.readdirSync(pluginFolder).forEach(file => {
     if (file.endsWith(".js")) {
@@ -22,7 +30,7 @@ async function startBot() {
     }
   });
 
-  // Comando di base
+  // Comando base .ping
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0];
     const text = msg?.message?.conversation || msg?.message?.extendedTextMessage?.text;
@@ -33,7 +41,15 @@ async function startBot() {
       await sock.sendMessage(msg.key.remoteJid, { text: "🏓 Pong!" }, { quoted: msg });
     }
   });
+
+  console.log("🟢 Bot pronto!");
 }
 
 console.log("✅ Avvio bot...");
-startBot();
+(async () => {
+  try {
+    await startBot();
+  } catch (err) {
+    console.error("❌ Errore durante l'avvio del bot:", err);
+  }
+})();
