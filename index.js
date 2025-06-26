@@ -3,9 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const pino = require('pino');
 
-// Avvio bot
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState('./session');
+  const SESSION_ID = process.env.SESSION_ID || 'session';
+  console.log(`📁 Sessione in uso: ./${SESSION_ID}`);
+
+  const { state, saveCreds } = await useMultiFileAuthState(`./${SESSION_ID}`);
   const { version } = await fetchLatestBaileysVersion();
 
   const sock = makeWASocket({
@@ -15,16 +17,25 @@ async function startBot() {
     printQRInTerminal: false
   });
 
-  // Salva le credenziali su aggiornamento
   sock.ev.on('creds.update', saveCreds);
 
-  // Stato connessione
-  sock.ev.on('connection.update', ({ connection }) => {
-    if (connection === 'open') console.log('✅ Bot connesso a WhatsApp!');
-    else if (connection === 'close') console.log('❌ Connessione chiusa.');
+  sock.ev.on('connection.update', (update) => {
+    const { connection, lastDisconnect } = update;
+
+    if (connection) {
+      console.log(`🔌 Stato connessione: ${connection}`);
+    }
+
+    if (connection === 'open') {
+      console.log('✅ Bot connesso a WhatsApp!');
+    }
+
+    if (connection === 'close') {
+      console.log('❌ Connessione chiusa. Riprova...');
+    }
   });
 
-  // Carica tutti i plugin nella cartella ./plugins
+  // Carica plugin
   const pluginFolder = path.join(__dirname, 'plugins');
   fs.readdirSync(pluginFolder).forEach(file => {
     if (file.endsWith('.js')) {
@@ -36,9 +47,19 @@ async function startBot() {
       }
     }
   });
+
+  // Test .ping
+  sock.ev.on('messages.upsert', async ({ messages }) => {
+    const msg = messages[0];
+    if (!msg || msg.key.fromMe) return;
+
+    const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
+    if (text?.startsWith('.ping')) {
+      await sock.sendMessage(msg.key.remoteJid, { text: '🏓 Pong!' }, { quoted: msg });
+    }
+  });
 }
 
-// Avvia il bot
 console.log('🚀 Avvio Levanter...');
 startBot().catch(err => {
   console.error('❌ Errore durante l\'avvio:', err);
