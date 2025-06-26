@@ -1,6 +1,6 @@
 const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys'); const fs = require('fs'); const path = require('path'); const pino = require('pino');
 
-async function startBot() { const SESSION_ID = process.env.SESSION_ID || 'session'; console.log(\u{1F4C1} Sessione in uso: ./${SESSION_ID});
+async function startBot() { const SESSION_ID = process.env.SESSION_ID || 'session'; console.log(Sessione in uso: ./${SESSION_ID});
 
 const { state, saveCreds } = await useMultiFileAuthState(./${SESSION_ID}); const { version } = await fetchLatestBaileysVersion();
 
@@ -11,7 +11,7 @@ sock.ev.on('creds.update', saveCreds);
 sock.ev.on('connection.update', (update) => { const { connection, lastDisconnect } = update;
 
 if (connection) {
-  console.log(`\u{1F50C} Stato connessione: ${connection}`);
+  console.log(`Stato connessione: ${connection}`);
 }
 
 if (connection === 'open') {
@@ -37,5 +37,5 @@ if (text?.startsWith('.ping')) {
 
 console.log('🚀 Avvio Levanter...'); startBot().catch(err => { console.error('❌ Errore durante l'avvio:', err); });
 
-// Keep-alive log ogni 15 secondi setInterval(() => { console.log('🧪 Il bot è vivo ma in attesa di connessione...'); }, 15000);
+setInterval(() => { console.log('🧪 Il bot è vivo ma in attesa di connessione...'); }, 15000);
 
