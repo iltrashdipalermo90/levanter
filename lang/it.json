@@ -1,0 +1,470 @@
+{
+  "extra": {
+    "init_session": "[{0}] Avviata nuova sessione",
+    "load_session": "[{0}] Verifica dello stato della sessione",
+    "invalid_session": "[{0}] {1} ID SESSIONE NON VALIDO, RIPETERE LA SCANSIONE!!!",
+    "success_session": "[{0}] Sessione convalidata con successo.",
+    "connecting": "[{0}] Connessione in corso...",
+    "connected": "[{0}] Connesso {1}",
+    "instance_close": "[{0}] Connessione terminata",
+    "instance_restart": "[{0}] Riavvio dell'istanza in corso...",
+    "reconnect": "[{0}] Riconnessione...({1})",
+    "reconnect_after": "[{0}] Riconnetti dopo 1 minuto",
+    "another_login": "[{0}] sessione avviata su un altro dispositivo.",
+    "error_message": "```---RAPPORTO DI ERRORE---\n\nVersione : {0}\nMessaggio : {1}\nErrore : {2}\nJid : {3}\nComando : {4}\nPiattaforma : {5}```\n\n```-----``` *Realizzato da LyFE con ❣* ```-----```",
+    "deleted_message": " messaggioEliminato",
+    "install_external_plugin": "[{0}] Installazione plugin esterni in corso...",
+    "installed_external_plugin": "[{0}] Plugin esterni installati",
+    "plugin_install": "[{0}] Installazione plugin in corso...",
+    "plugin_installed": "[{0}] {1} installato",
+    "plugins_installed": "[{0}] Plugin installati",
+    "plugin_install_error": "[{0}] Errore durante l'installazione di {1}, plugin eliminato",
+    "plugin_not_found": "[{0}] plugin {1} non trovato (404), plugin eliminato",
+    "group_cmd": "Questo comando è disponibile solo nelle chat di gruppo."
+  },
+  "plugins": {
+    "common": {
+      "reply_to_message": "Rispondi a un messaggio",
+      "not_admin": "Non sono amministratore.",
+      "reply_to_image": "Rispondi a un'immagine",
+      "update": "_Impostazioni aggiornate con successo! Le tue preferenze sono state salvate e sono ora attive._"
+    },
+    "menu": {
+      "help": "```╭────────────────╮\n ʟᴇᴠᴀɴᴛᴇʀ\n╰────────────────╯\n\n╭────────────────\n│ Prefisso : {0}\n│ Utente : {1}\n│ Ora : {2}\n│ Giorno : {3}\n│ Data : {4}\n│ Versione : {5}\n│ Plugin : {6}\n│ Ram : {7}\n│ Uptime : {8}\n│ Piattaforma : {9}\n╰────────────────```",
+      "menu": "```╭═══ LEVANTER ═══⊷\n┃❃╭──────────────\n┃❃│ Prefisso : {0}\n┃❃│ Utente : {1}\n┃❃│ Ora : {2}\n┃❃│ Giorno : {3}\n┃❃│ Data : {4}\n┃❃│ Versione : {5}\n┃❃│ Plugin : {6}\n┃❃│ Ram : {7}\n┃❃│ Uptime : {8}\n┃❃│ Piattaforma : {9}\n┃❃╰───────────────\n╰═════════════════⊷```"
+    },
+    "afk": {
+      "example": "> *Uso AFK:*\n- Imposta AFK: *afk [motivo]*\n- Esempio: *afk Sono occupato* Ultimo avvistamento #lastseen fa\n- Inviando un messaggio l'AFK viene rimosso automaticamente\n- Disabilita AFK: *afk off*",
+      "not_afk": "Non sei più AFK.",
+      "desc": "Imposta lo stato AFK (Away From Keyboard)"
+    },
+    "alive": {
+      "default": "Sono operativo\nUptime : #uptime",
+      "desc": "Mostra lo stato di 'alive' del bot con testo opzionale personalizzato."
+    },
+    "antifake": {
+      "example": "*Stato Antifake:* {0}\n\n> *Esempi di utilizzo:*\n- *antifake list* - Visualizza codici paese\n- *antifake !91,1* - Consenti/Blocca specifici codici paese\n- *antifake on | off* - Abilita/Disabilita antifake",
+      "desc": "Abilita o configura il rilevamento di numeri falsi",
+      "not": "Nessun codice paese da elencare.",
+      "status": "Antifake è ora *{0}*.",
+      "update": "> Antifake Aggiornato\n*Consentiti:* {0}\n*Non consentiti:* {1}"
+    },
+    "antilink": {
+      "desc": "Abilita o configura il filtro link",
+      "disable": "_Antilink è già disabilitato._",
+      "antilink_notset": "Antilink non è stato configurato.",
+      "status": "Antilink è ora *{0}*.",
+      "info": "> Stato Antilink: {0}\n*URL consentiti:* {1}\n*Azione:* {2}",
+      "action_invalid": "*Azione specificata non valida.*",
+      "action_update": "Azione Antilink aggiornata in: *{0}*",
+      "update": "> Antilink Aggiornato\n*Consentiti:* {0}\n*Non consentiti:* {1}",
+      "example": "Stato Antilink: *{0}*\n\n> Esempi di utilizzo:\n- antilink info - Visualizza impostazioni correnti\n- antilink whatsapp.com - Consenti URL specifici\n- antilink on | off - Abilita/Disabilita antilink\n- antilink action/ - Imposta azione per i link"
+    },
+    "antiword": {
+      "desc": "Filtra parole specifiche nella chat di gruppo",
+      "example": "Stato AntiWord: {0}\n> *Esempi di utilizzo:*\n- antiword action/* - Imposta azione per le violazioni\n- antiword on | off - Abilita/Disabilita filtro parole\n- setvar ANTIWORDS:parola1,parola2,... - Definisci parole bloccate",
+      "action_update": "Azione AntiWord aggiornata in: *{0}*",
+      "status": "AntiWord è ora *{0}*."
+    },
+    "apk": {
+      "desc": "Scarica APK da APKMirror",
+      "example": "> *Esempi:*\n- apk Mixplorer\n- apk whatsapp,apkm (include bundle APKs)",
+      "no_result": "_Nessun risultato trovato per la tua ricerca._",
+      "apps_list": "App corrispondenti ({0})"
+    },
+    "delete": {
+      "desc": "Anti-delete: Recupera messaggi eliminati",
+      "example": "> *Esempi:*\n- delete p - Invia messaggi eliminati nella tua chat/sudo\n- delete g - Invia messaggi eliminati nello stesso gruppo\n- delete off - Disabilita anti-delete\n- delete  - Invia messaggi eliminati a uno specifico JID",
+      "invalid_jid": "*Errore:* _JID non valido_",
+      "dlt_msg_jid": " _I messaggi eliminati saranno inviati a: {0}_",
+      "dlt_msg_disable": "Anti-delete è stato disabilitato.",
+      "dlt_msg_sudo": "_I messaggi eliminati saranno inviati alla tua chat o sudo._",
+      "dlt_msg_chat": "_I messaggi eliminati saranno inviati alla chat stessa._"
+    },
+    "dlt": {
+      "desc": "Elimina messaggi a cui hai risposto"
+    },
+    "fb": {
+      "desc": "Scarica video da Facebook",
+      "example": "",
+      "quality": "Scegli qualità video",
+      "invalid": "*Errore:* _Nessun video trovato per l'URL fornito._"
+    },
+    "fancy": {
+      "desc": "Crea testo fancy dal testo fornito",
+      "example": "> *Uso:*\nfancy \nfancy  (rispondi a un messaggio)\n\n*Esempi:*\n- fancy Hello\n- fancy 7 (mentre rispondi a un messaggio)",
+      "invalid": "*Numero di font non valido!*\nInserisci un numero tra *1-47*."
+    },
+    "stop": {
+      "desc": "Elimina filtri nella chat",
+      "example": "> *Uso:*\n- stop \n- stop ciao",
+      "delete": "{0} eliminato",
+      "not_found": "_{0} non trovato nei filtri._"
+    },
+    "filter": {
+      "desc": "Gestisci filtri nei gruppi",
+      "example": "> *Esempio:*\n- filter ciao (mentre rispondi a un messaggio di testo)\n- filter list (Mostra filtri correnti)",
+      "list": "> *Filtri Correnti:*\n{0}",
+      "filter_add": "*{0}* filtro aggiunto"
+    },
+    "forward": {
+      "desc": "Inoltra il messaggio a cui hai risposto ai JID specificati",
+      "foward": "Messaggio inoltrato a: {0}",
+      "example": "JID non valido!\n> *Uso:*\n- forward \n- forward 1234567890@s.whatsapp.net"
+    },
+    "save": {
+      "desc": "Inoltra il messaggio a te stesso",
+      "save": "Messaggio salvato!"
+    },
+    "gemini": {
+      "desc": "Google Gemini AI - Chiedi qualsiasi cosa!",
+      "example": "> *Esempio :*\n- gemini ciao\n- gemini cosa c'è nell'immagine (mentre rispondi a un'immagine)",
+      "Key": "> Mancante la chiave API di Gemini!\nOttienila qui: https://aistudio.google.com/app/apikey\n\n*Impostala con:*\nsetvar GEMINI_API_KEY = tua_chiave_api"
+    },
+    "gstop": {
+      "desc": "Elimina gfilters in tutti i gruppi",
+      "example": "> *Uso:*\n- gstop \n- gstop ciao",
+      "delete": "{0} eliminato",
+      "not_found": "_{0} non trovato nei gfilters._"
+    },
+    "pstop": {
+      "desc": "Elimina pfilter in tutte le chat personali",
+      "example": "> *Uso:*\n- pstop \n- pstop ciao",
+      "delete": "{0} eliminato",
+      "not_found": "_{0} non trovato nel pfilter._"
+    },
+    "gfilter": {
+      "desc": "Gestisci filtri globali nei gruppi",
+      "example": "> *Esempio :*\n- gfilter ciao (mentre rispondi a un messaggio di testo)\n- gfilter list (Mostra gfilters correnti)",
+      "add": "*{0}* gfilter aggiunto"
+    },
+    "pfilter": {
+      "desc": "Gestisci filtri globali nelle chat personali",
+      "example": "> *Esempio :*\n- pfilter ciao (mentre rispondi a un messaggio di testo)\n- pfilter list (Mostra pfilters correnti)",
+      "add": "*{0}* pfilter aggiunto"
+    },
+    "gpp": {
+      "desc": "Cambia icona del gruppo",
+      "update": "_Icona del gruppo aggiornata_"
+    },
+    "greet": {
+      "setdesc": "Imposta un messaggio di saluto personalizzato",
+      "setexample": "> *Esempio:* setgreet Ciao, sono un bot.\nIl mio capo risponderà a breve.",
+      "setupdate": "_Messaggio di saluto aggiornato._",
+      "getdesc": "Recupera il messaggio di saluto personalizzato",
+      "notsetgreet": "> Nessun messaggio di saluto impostato.",
+      "deldesc": "Elimina il messaggio di saluto personalizzato",
+      "delupdate": "_Messaggio di saluto eliminato._"
+    },
+    "greetings": {
+      "welcome_desc": "Invia un messaggio di benvenuto ai nuovi membri",
+      "welcome_example": "Benvenuto è attualmente {0}\n\nPer maggiori dettagli, visita: https://levanter-delta.vercel.app/",
+      "welcome_enable": "_Benvenuto abilitato_",
+      "welcome_disable": "_Benvenuto disabilitato_",
+      "welcome_delete": "_Messaggio di benvenuto eliminato_",
+      "goodbye_desc": "Invia un messaggio di addio ai membri",
+      "goodbye_example": "Addio è attualmente {0}\n\nPer maggiori dettagli, visita: https://levanter-delta.vercel.app/",
+      "goodbye_enable": "_Addio abilitato_",
+      "goodbye_disable": "_Addio disabilitato_",
+      "goodbye_delete": "_Messaggio di addio eliminato_"
+    },
+    "groq": {
+      "example": "*Esempio:* groq Ciao\n\nPuoi opzionalmente impostare le seguenti variabili d'ambiente:\n- GROQ_API_KEY\n- GROQ_MODEL\n- GROQ_SYSTEM_MSG\n\nPer dettagli, visita: https://console.groq.com/keys",
+      "desc": "Interagisci con GROQ AI"
+    },
+    "kick": {
+      "desc": "Rimuovi membri dal gruppo.",
+      "not_admin": "Non sono admin, non posso rimuovere membri.",
+      "mention_user": "Per favore menziona un utente o rispondi al suo messaggio.",
+      "admin": "L'utente specificato è admin e non può essere rimosso.",
+      "kicking_all": "Sto rimuovendo tutti i membri non amministratori... ({0} membri). Riavvia il bot se vuoi fermarmi."
+    },
+    "add": {
+      "desc": "Aggiungi un membro ai gruppi",
+      "warning": "> Evita di aggiungere numeri non salvati nei contatti; questo può aumentare il rischio di ban.",
+      "not_admin": "Non sono admin, non posso aggiungere membri.",
+      "invalid_number": "Fornisci un numero di telefono valido. Esempio: add 91987654321",
+      "failed": "Aggiunta fallita."
+    },
+    "promote": {
+      "desc": "Promuovi un membro a admin",
+      "example": "Per esempio: pdm on",
+      "activated": "Avviso promozione/declassamento attivato.",
+      "deactivated": "Avviso promozione/declassamento disattivato."
+    },
+    "ping": {
+      "desc": "Controlla il tempo di risposta del bot (latenza).",
+      "ping_sent": "Ping!",
+      "pong": "Pong! Tempo di risposta: {0} ms"
+    },
+    "pinterest": {
+      "usage": "Esempio: pinterest ",
+      "not_found": "Nessun media trovato.\nControlla l'URL e riprova.",
+      "desc": "Scarica video o immagini da Pinterest."
+    },
+    "plugin": {
+      "usage": "> Esempio:\n- plugin \n- plugin list",
+      "desc": "Installa plugin esterni fornendo un URL di Gist contenente il codice, o elenca tutti i plugin installati.",
+      "invalid": "Fornisci un URL plugin valido o un nome plugin.",
+      "not_installed": "Non ci sono plugin installati al momento.",
+      "installed": "Nuovi plugin installati: {0}"
+    },
+    "remove": {
+      "usage": "> Esempio:\n- remove \n- remove all",
+      "desc": "Elimina plugin esterni specificando il nome o rimuovi tutti i plugin installati.",
+      "not_found": "Plugin *{0}* non trovato.",
+      "removed": "Plugin rimossi con successo."
+    },
+    "reboot": {
+      "desc": "Riavvia l'istanza del bot usando PM2.",
+      "starting": "Riavvio in corso..."
+    },
+    "fullpp": {
+      "usage": "Esempio: fullpp (rispondi a un'immagine)",
+      "desc": "Imposta foto profilo a piena dimensione.",
+      "updated": "Foto profilo aggiornata."
+    },
+    "jid": {
+      "desc": "Restituisce il JID di un utente o chat.\nVerifica menzioni, risposte o predefinisce la chat corrente."
+    },
+    "left": {
+      "desc": "Abbandona il gruppo corrente.\nSe è fornito testo aggiuntivo, verrà inviato prima di lasciare."
+    },
+    "block": {
+      "usage": "Esempio: block (rispondi o menziona un utente)",
+      "desc": "Blocca l'utente specificato.",
+      "status": "Bloccato"
+    },
+    "unblock": {
+      "usage": "Esempio: unblock (rispondi o menziona un utente)",
+      "desc": "Sblocca l'utente specificato.",
+      "status": "_Sbloccato_"
+    },
+    "pp": {
+      "usage": "Esempio: pp (rispondi a un'immagine)",
+      "desc": "Aggiorna la tua foto profilo usando l'immagine della risposta."
+    },
+    "whois": {
+      "number": "*Numero :* {0}",
+      "name": "*Nome :* {0}",
+      "about": "*Info :* {0}",
+      "setAt": "*Impostato il:* {0}",
+      "owner": "*Proprietario :* {0}",
+      "members": "*Membri* : {0}",
+      "description": "*Descrizione* : {0}",
+      "created": "*Creato* : {0}",
+      "usage": "Esempio: whois ",
+      "desc": "Mostra foto profilo e info aggiuntive (es. stato) di un utente o gruppo."
+    },
+    "gjid": {
+      "desc": "Elenca tutti i JID di gruppo insieme ai nomi dei gruppi."
+    },
+    "qr": {
+      "usage": "Esempio: qr testo O rispondi a un'immagine QR con qr",
+      "desc": "Genera un codice QR dal testo fornito o decodifica un QR da un'immagine."
+    },
+    "reddit": {
+      "usage": "Esempio: reddit ",
+      "desc": "Scarica un video da un post Reddit specificando l'URL.",
+      "error": "Nessun video trovato per l'URL fornito."
+    },
+    "rmbg": {
+      "usage": "Esempio: rmbg (rispondi a un'immagine)",
+      "desc": "Rimuove lo sfondo dall'immagine rispondendo, usando l'API di remove.bg",
+      "key": "Per usare questo comando, registrati su remove.bg, verifica l'account, copia la tua chiave API e impostala con .setvar RMBG_KEY: (es. .setvar RMBG_KEY:GWQ6jVy9MBpfYF9SnyG8jz8P).\nSIGNUP: https://accounts.kaleido.ai/users/sign_up | API KEY: https://www.remove.bg/dashboard#api-key",
+      "error": "Chiave API o immagine mancante.\nImposta la tua chiave API e rispondi a un'immagine."
+    },
+    "setschedule": {
+      "usage": "> *Esempio :*\n- setschedule jid,min-ora-giorno-mese (formato 24h; giorno e mese opzionali)\n- setschedule 91987654321@s.whatsapp.net, 9-9-13-8\n- setschedule 91987654321@s.whatsapp.net, 0-10 (invia ogni giorno alle 10:00)\n- setschedule 91987654321@s.whatsapp.net, 0-10, once (invia alle 10:00, una sola volta)",
+      "desc": "Programma un messaggio da inviare automaticamente a un orario specificato.\nFornisci i JID di destinazione e l'orario (minuto-ora-giorno-mese). Rispondi al messaggio da schedulare.",
+      "invalid": "Formato o orario non valido.\nSegui gli esempi forniti.",
+      "no_reply": "Rispondi al messaggio da programmare per l'invio.",
+      "scheduled": "_Programmazione avvenuta con successo per_ *{0}* _in_ @{1}."
+    },
+    "getschedule": {
+      "desc": "Recupera tutti i messaggi programmati per la chat specificata.",
+      "not_found": "Nessun messaggio programmato.",
+      "time": "Orario : {0}"
+    },
+    "delschedule": {
+      "usage": "> Esempio:\n- delschedule 9198765431@s.whatsapp.net, 8-8-10-10\n- delschedule 9198765431@s.whatsapp.net\n- delschedule all",
+      "desc": "Elimina un messaggio programmato specificando JID e orario, o rimuovi tutti i messaggi programmati.",
+      "invalid": "Formato non valido.\nSegui gli esempi forniti.",
+      "not_found": "Programmazione non trovata.",
+      "deleted": "_Programmazione eliminata._"
+    },
+    "setstatus": {
+      "usage": "Esempio: setstatus jid,jid,jid,... O setstatus contatto",
+      "desc": "Imposta uno stato WhatsApp per contatti specifici o importati.\nRispondi a un messaggio (testo, immagine o video) per impostare lo stato.",
+      "reply_required": "Rispondi a un messaggio per impostare lo stato.",
+      "sent": "_Stato inviato a {0} contatti._"
+    },
+    "scstatus": {
+      "usage": "Esempi:\n- scstatus jid,jid,jid,...|min-ora-giorno-mese (giorno e mese opzionali)\n- scstatus contatto|min-ora-giorno-mese\n- scstatus delete all|min-ora-giorno-mese\n- scstatus list",
+      "desc": "Programma uno stato WhatsApp da inviare a un orario specificato.\nUsa 'contatto' per contatti importati o fornisci JID specifici.",
+      "reply_required": "Rispondi a un messaggio per programmare lo stato.",
+      "invalid": "Formato non valido.\nSegui gli esempi forniti.",
+      "scheduled": "_Programmazione eseguita per_ {0}.",
+      "list": "Elenco stati programmati:",
+      "deleted": "Programmazione eliminata."
+    },
+    "antispam": {
+      "usage": "Uso: antispam on | off",
+      "desc": "Abilita o disabilita la funzione AntiSpam per il gruppo.",
+      "activated": "AntiSpam attivato.",
+      "deactivated": "AntiSpam disattivato."
+    },
+    "sticker": {
+      "desc": "Converti un'immagine o video in sticker.\nRispondi a un'immagine o video per generare lo sticker.",
+      "reply_required": "Rispondi a un'immagine o video."
+    },
+    "circle": {
+      "desc": "Trasforma un'immagine in uno sticker circolare.",
+      "reply_required": "Rispondi a un'immagine."
+    },
+    "take": {
+      "usage": "Esempio: take  (rispondi a uno sticker o audio). Per audio il titolo è obbligatorio; artisti e URL sono opzionali.",
+      "desc": "Modifica il pacchetto sticker aggiornando i metadati. Se rispondi a uno sticker, aggiorna i suoi metadati.\nSe rispondi a un audio, aggiungi metadati (titolo, artisti, URL).",
+      "reply_required": "Rispondi a uno sticker o audio.",
+      "additional_info": "Per i metadati audio, artisti o URL sono opzionali."
+    },
+    "mp4": {
+      "desc": "Converti uno sticker animato (WebP) in un video MP4.",
+      "reply_required": "Rispondi a uno sticker animato."
+    },
+    "story": {
+      "usage": "Esempio: story  (o rispondi a un messaggio con lo username)",
+      "desc": "Scarica le storie Instagram per lo username fornito.\nSe ci sono più storie, verrà fornito un elenco per la selezione.",
+      "not_found": "Nessuna storia trovata per lo username fornito.",
+      "list": "Totale {0} storie disponibili. Selezionane una."
+    },
+    "tag": {
+      "usage": "Esempio: tag all | tag admin | tag notadmin | tag  (o rispondi a un messaggio con 'tag')",
+      "desc": "Tagga i membri del gruppo in base alla tua scelta.\nUsa 'all' per menzionare tutti, 'admin' per gli amministratori, 'notadmin' per i non admin, o fornisci un messaggio personalizzato con le menzioni."
+    },
+    "tictactoe": {
+      "usage": "Esempio: tictactoe  O tictactoe restart  O tictactoe end",
+      "desc": "Gioca a Tris contro un avversario. Sfida un utente menzionandolo o rispondendo al suo messaggio.\nUsa 'tictactoe end' per terminare e 'tictactoe restart ' per ricominciare con un nuovo avversario.",
+      "choose_opponent": "Scegli un avversario rispondendo o menzionando un utente. Non puoi giocare contro te stesso.",
+      "game_ended": "Gioco terminato.",
+      "game_restarted": "Gioco ricominciato con il nuovo avversario.",
+      "invalid_input": "Input non valido.\nFornisci un avversario valido o usa 'end' o 'restart'.",
+      "players": "Giocatori",
+      "already_occupied": "_Casella già occupata_",
+      "current_player": "turnoAttuale",
+      "game_finish": "Gioco finito ",
+      "winner": "Vincitore"
+    },
+    "tiktok": {
+      "usage": "Uso: tiktok  (o rispondi a un messaggio con l'URL)",
+      "desc": "Scarica un video TikTok dall'URL fornito.",
+      "not_found": "Video non trovato.\nVerifica l'URL e riprova."
+    },
+    "tog": {
+      "usage": "Esempio: tog ping off",
+      "desc": "Abilita o disabilita un comando del bot.",
+      "invalid": "Input non valido. Usa: tog  on|off (es. tog ping off)",
+      "self_reference": "Davvero volevi eliminarmi?",
+      "enabled": "{0} abilitato.",
+      "disabled": "{0} disabilitato."
+    },
+    "trt": {
+      "usage": "Esempio: trt ml hi O trt ml (rispondi a un messaggio di testo)",
+      "desc": "Traduci testo usando Google Translate.\nSpecifica il codice lingua di destinazione (e opzionalmente quello sorgente) rispondendo a un messaggio."
+    },
+    "twitter": {
+      "usage": "Esempio: twitter  (o rispondi a un messaggio con l'URL)",
+      "desc": "Scarica un video Twitter.\nSe ci sono opzioni di qualità multiple, ti verrà chiesto di sceglierne una.",
+      "not_found": "Nessun video trovato per l'URL Twitter fornito.",
+      "choose_quality": "> Scegli qualità video\n"
+    },
+    "upload": {
+      "usage": "Esempio: upload  (o rispondi a un messaggio con un URL)",
+      "desc": "Scarica media da un URL fornito.\nPer URL di Google Images abbreviati, viene recuperato automaticamente l'URL diretto."
+    },
+    "url": {
+      "usage": "Esempio: url O url imgur (rispondi a un'immagine o video)",
+      "desc": "Converti un'immagine o video in un URL. Opzionalmente specifica un servizio (es. 'imgur')."
+    },
+    "getvar": {
+      "usage": "Esempio: getvar sudo",
+      "desc": "Mostra il valore di una variabile.\nFornisci la chiave della variabile (case-insensitive).",
+      "not_found": "{0} non trovata tra le variabili."
+    },
+    "delvar": {
+      "usage": "Esempio: delvar sudo",
+      "desc": "Elimina una variabile specificando la chiave.",
+      "not_found": "{0} non trovata tra le variabili.",
+      "deleted": "{0} eliminata."
+    },
+    "setvar": {
+      "usage": "Esempio: setvar chiave = valore",
+      "desc": "Imposta una variabile con chiave e valore.\nUsa '=' per separare chiave e valore.",
+      "success": "Nuova variabile {0} impostata come {1}."
+    },
+    "allvar": {
+      "desc": "Mostra tutte le variabili salvate in ordine alfabetico."
+    },
+    "vote": {
+      "usage": "> Esempio :\nvote q|Qual è il tuo colore preferito?\no||Blu\no||Rosso",
+      "desc": "Avvia una votazione in un gruppo WhatsApp.",
+      "notes": "Se non sono specificati destinatari, il messaggio di voto viene semplicemente inviato al gruppo corrente.",
+      "no_vote": "Nessuna votazione disponibile!",
+      "total_vote": "voti totali : *{0}*",
+      "delete_vote": "Elimina la votazione corrente per crearne una nuova.",
+      "option_required": "richieste almeno due opzioni",
+      "question_required": "domanda obbligatoria",
+      "vote": "Reagisci o rispondi all'opzione per votare.",
+      "vote_deleted": "_Votazione eliminata._",
+      "voted": "@{0} ha votato per {1}\n\n${2}"
+    },
+    "warn": {
+      "usage": "Esempio: warn @utente O warn reset @utente.\nPuoi anche rispondere a un messaggio e digitare 'warn' o 'warn reset'.",
+      "desc": "Ammonisci un utente nel gruppo. Ogni ammonizione aumenta il contatore; al superamento del limite l'utente viene cacciato.\nUsa 'warn reset' per azzerare gli avvisi.",
+      "reset_usage": "Esempio: warn reset @utente (o rispondi e digita 'warn reset').",
+      "cannot_remove_admin": "Non posso rimuovere un admin."
+    },
+    "wcg": {
+      "usage": "Esempi:\n- wcg start (forza l'avvio del gioco Word Chain)\n- wcg end (termina il gioco corrente)\n- wcg  (gioca continuando la catena di parole)",
+      "desc": "Gioco Word Chain: partecipa fornendo una parola che continua la catena.\nUsa 'wcg start' per iniziare o 'wcg end' per fermare."
+    },
+    "wrg": {
+      "usage": "Esempi:\n- wrg start (forza l'avvio del gioco di parole random)\n- wrg end (termina il gioco corrente)\n- wrg  (gioca inviando una parola)",
+      "desc": "Gioco WORD Random: rispondi con una parola casuale. Usa 'wrg start' per iniziare o 'wrg end' per terminare."
+    },
+    "yts": {
+      "usage": "Esempio: yts baymax",
+      "desc": "Cerca video YouTube per query o URL.\nSe fornisci un URL valido, viene restituita la prima info video."
+    },
+    "song": {
+      "usage": "Esempio: song indila love story O song  (rispondi a un messaggio)",
+      "desc": "Scarica una canzone da YouTube.\nSe fornisci un URL, la canzone viene scaricata direttamente; altrimenti viene mostrata una lista di risultati.",
+      "not_found": "Nessuna canzone trovata per la query o URL fornito."
+    },
+    "video": {
+      "usage": "Esempio: video  (o rispondi a un messaggio con l'URL)",
+      "desc": "Scarica un video YouTube.\nSe fornisci un URL diretto, il video viene scaricato; altrimenti viene mostrata una lista di risultati.",
+      "not_found": "Nessun video trovato per la query o URL fornito."
+    },
+    "update": {
+      "usage": "Esempio: update",
+      "desc": "Controlla nuovi aggiornamenti.\nMostra aggiornamenti disponibili o conferma che il bot è aggiornato.",
+      "up_to_date": "Il bot è già aggiornato.",
+      "available": "{0} nuovi aggiornamenti disponibili:\n{1}"
+    },
+    "update_now": {
+      "usage": "Esempio: update now",
+      "desc": "Aggiorna il bot all'ultima versione.",
+      "up_to_date": "Il bot è già aggiornato.\nNessun aggiornamento disponibile.",
+      "updating": "Aggiornamento in corso...",
+      "updated": "Bot aggiornato con successo!"
+    },
+    "antigm": {
+      "usage": "> Uso:\n- antigm  — Abilita/disabilita anti-mention gruppo\n- antigm  — Imposta azione per mention di gruppo\n- antigm ignore  — Ignora anti-mention per specifici gruppi",
+      "action": "Azione aggiornata: le mention di gruppo ora causeranno *{0}*.",
+      "filter": "JID ignorati aggiornati per l'anti-mention di gruppo.",
+      "enabled": "Anti-mention di gruppo abilitato.",
+      "disabled": "Anti-mention di gruppo disabilitato."
+    }
+  }
+}
