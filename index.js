@@ -1,42 +1,21 @@
-const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys'); const fs = require('fs'); const path = require('path'); const pino = require('pino');
+const { Client, logger } = require('./lib/client')
+const { DATABASE, VERSION } = require('./config')
+const { stopInstance } = require('./lib/pm2')
 
-async function startBot() { const SESSION_ID = process.env.SESSION_ID || 'session'; console.log(Sessione in uso: ./${SESSION_ID});
-
-const sessionPath = ./${SESSION_ID}/creds.json; if (!fs.existsSync(sessionPath)) { console.warn(⚠️ ATTENZIONE: File ${sessionPath} non trovato! Il bot attenderà il pairing.); } else { console.log(✅ File ${sessionPath} trovato. Avvio connessione...); }
-
-const { state, saveCreds } = await useMultiFileAuthState(./${SESSION_ID}); const { version } = await fetchLatestBaileysVersion();
-
-const sock = makeWASocket({ version, auth: state, logger: pino({ level: 'silent' }), printQRInTerminal: false });
-
-sock.ev.on('creds.update', saveCreds);
-
-sock.ev.on('connection.update', (update) => { const { connection } = update;
-
-if (connection) {
-  console.log(`Stato connessione: ${connection}`);
+const start = async () => {
+  logger.info(`levanter ${VERSION}`)
+  try {
+    await DATABASE.authenticate({ retry: { max: 3 } })
+  } catch (error) {
+    const databaseUrl = process.env.DATABASE_URL
+    logger.error({ msg: 'Unable to connect to the database', error: error.message, databaseUrl })
+    return stopInstance()
+  }
+  try {
+    const bot = new Client()
+    await bot.connect()
+  } catch (error) {
+    logger.error(error)
+  }
 }
-
-if (connection === 'open') {
-  console.log('✅ Bot connesso a WhatsApp!');
-}
-
-if (connection === 'close') {
-  console.log('❌ Connessione chiusa. Riprova...');
-}
-
-});
-
-const pluginFolder = path.join(__dirname, 'plugins'); fs.readdirSync(pluginFolder).forEach(file => { if (file.endsWith('.js')) { try { require(path.join(pluginFolder, file))(sock); console.log(✅ Plugin ${file} caricato); } catch (err) { console.error(❌ Errore nel plugin ${file}:, err); } } });
-
-sock.ev.on('messages.upsert', async ({ messages }) => { const msg = messages[0]; if (!msg || msg.key.fromMe) return;
-
-const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
-if (text?.startsWith('.ping')) {
-  await sock.sendMessage(msg.key.remoteJid, { text: '🏓 Pong!' }, { quoted: msg });
-}
-
-}); }
-
-console.log('🚀 Avvio Levanter...'); startBot().catch(err => { console.error('❌ Errore durante l'avvio:', err); });
-
-setInterval(() => { console.log('🧪 Il bot è vivo ma in attesa di connessione...'); }, 15000);
+start()
