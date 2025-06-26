@@ -8,7 +8,7 @@ const sock = makeWASocket({ version, auth: state, logger: pino({ level: 'silent'
 
 sock.ev.on('creds.update', saveCreds);
 
-sock.ev.on('connection.update', (update) => { const { connection, lastDisconnect } = update;
+sock.ev.on('connection.update', (update) => { const { connection } = update;
 
 if (connection) {
   console.log(`Stato connessione: ${connection}`);
@@ -38,4 +38,3 @@ if (text?.startsWith('.ping')) {
 console.log('🚀 Avvio Levanter...'); startBot().catch(err => { console.error('❌ Errore durante l'avvio:', err); });
 
 setInterval(() => { console.log('🧪 Il bot è vivo ma in attesa di connessione...'); }, 15000);
-
