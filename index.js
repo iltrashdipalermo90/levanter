@@ -9,7 +9,7 @@ async function startBot() {
     logger: pino({ level: "silent" }),
   });
 
-  // Caricamento plugin
+  // Caricamento dei plugin dalla cartella /plugins
   const pluginFolder = path.join(__dirname, "plugins");
   fs.readdirSync(pluginFolder).forEach(file => {
     if (file.endsWith(".js")) {
@@ -22,7 +22,7 @@ async function startBot() {
     }
   });
 
-  // Comando base di test
+  // Comando di base
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0];
     const text = msg?.message?.conversation || msg?.message?.extendedTextMessage?.text;
