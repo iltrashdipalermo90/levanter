@@ -1,102 +1,131 @@
-const fs = require("fs");
-const path = require("path");
-const moment = require("moment");
+const fs = require('fs');
+const path = require('path');
+const moment = require('moment');
+const { cmd } = require('../lib');
 
-// File di salvataggio
-const filePath = path.join(__dirname, "classifica.json");
+// Percorso del file JSON
+const filePath = path.join(__dirname, 'classifica.json');
 
-// Inizializza il file se non esiste
+// Se il file non esiste, crealo
 if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, JSON.stringify({}));
+  fs.writeFileSync(filePath, '{}');
 }
 
-// Carica i dati
-const loadData = () => {
-    return JSON.parse(fs.readFileSync(filePath, "utf8"));
-};
+// Leggi i dati
+function loadData() {
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
 
 // Salva i dati
-const saveData = (data) => {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-};
+function saveData(data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+}
 
-// Registra ogni messaggio
-levanter.on("messages.upsert", async ({ messages }) => {
-    const message = messages[0];
-    if (!message || !message.key || !message.pushName || message.key.fromMe) return;
+// 📊 Conteggio dei messaggi in arrivo
+cmd(
+  {
+    on: 'text', // intercetta tutti i messaggi testuali
+    fromMe: false
+  },
+  async (m) => {
+    const data = loadData();
+    const chatId = m.jid;
+    const senderId = m.sender;
+    const today = moment().format('YYYY-MM-DD');
 
-    const chatId = message.key.remoteJid;
-    const senderId = message.key.participant || message.key.remoteJid;
-    const today = moment().format("YYYY-MM-DD");
-
-    let data = loadData();
     if (!data[chatId]) data[chatId] = {};
     if (!data[chatId][senderId]) data[chatId][senderId] = {};
     if (!data[chatId][senderId][today]) data[chatId][senderId][today] = 0;
 
     data[chatId][senderId][today] += 1;
     saveData(data);
-});
+  }
+);
 
-// Comando .topoggi
-levanter.cmd({ pattern: "topoggi", fromMe: false }, async (m, text, client) => {
-    const chatId = m.jid;
-    const today = moment().format("YYYY-MM-DD");
-
+// 🏆 Comando: .topoggi
+cmd(
+  {
+    pattern: 'topoggi',
+    fromMe: false
+  },
+  async (m, text, client) => {
     const data = loadData();
-    if (!data[chatId]) return await client.sendMessage(m.jid, { text: "Nessun dato per oggi." });
+    const chatId = m.jid;
+    const today = moment().format('YYYY-MM-DD');
 
-    const utenti = Object.entries(data[chatId])
-        .map(([id, giorni]) => ({
-            id,
-            messaggi: giorni[today] || 0,
-        }))
-        .filter(u => u.messaggi > 0)
-        .sort((a, b) => b.messaggi - a.messaggi)
-        .slice(0, 5);
-
-    if (utenti.length === 0) {
-        return await client.sendMessage(m.jid, { text: "Nessuno ha scritto oggi 😴" });
+    if (!data[chatId]) {
+      return await client.sendMessage(m.jid, { text: 'Nessun dato per oggi.' });
     }
 
-    let testo = "🏆 *Top 5 attivi oggi:*\n";
+    const utenti = Object.entries(data[chatId])
+      .map(([id, giorni]) => ({
+        id,
+        messaggi: giorni[today] || 0
+      }))
+      .filter((u) => u.messaggi > 0)
+      .sort((a, b) => b.messaggi - a.messaggi)
+      .slice(0, 5);
+
+    if (utenti.length === 0) {
+      return await client.sendMessage(m.jid, { text: 'Nessuno ha scritto oggi 😴' });
+    }
+
+    let testo = '🏆 *Top 5 attivi oggi:*\n';
     utenti.forEach((u, i) => {
-        testo += `${i + 1}. @${u.id.split("@")[0]} – ${u.messaggi} messaggi\n`;
+      testo += `${i + 1}. @${u.id.split('@')[0]} – ${u.messaggi} messaggi\n`;
     });
 
-    await client.sendMessage(m.jid, { text: testo, mentions: utenti.map(u => u.id) });
-});
+    await client.sendMessage(m.jid, {
+      text: testo,
+      mentions: utenti.map((u) => u.id)
+    });
+  }
+);
 
-// Comando .topweek
-levanter.cmd({ pattern: "topweek", fromMe: false }, async (m, text, client) => {
-    const chatId = m.jid;
+// 📅 Comando: .topweek
+cmd(
+  {
+    pattern: 'topweek',
+    fromMe: false
+  },
+  async (m, text, client) => {
     const data = loadData();
+    const chatId = m.jid;
 
-    if (!data[chatId]) return await client.sendMessage(m.jid, { text: "Nessun dato disponibile." });
+    if (!data[chatId]) {
+      return await client.sendMessage(m.jid, { text: 'Nessun dato per la settimana.' });
+    }
 
-    const giorniSettimana = [...Array(7).keys()].map(i =>
-        moment().subtract(i, "days").format("YYYY-MM-DD")
+    const giorniSettimana = [...Array(7).keys()].map((i) =>
+      moment().subtract(i, 'days').format('YYYY-MM-DD')
     );
 
     const counter = {};
 
     for (const [id, giorni] of Object.entries(data[chatId])) {
-        counter[id] = giorniSettimana.reduce((totale, giorno) => totale + (giorni[giorno] || 0), 0);
+      counter[id] = giorniSettimana.reduce(
+        (totale, giorno) => totale + (giorni[giorno] || 0),
+        0
+      );
     }
 
     const utenti = Object.entries(counter)
-        .filter(([, count]) => count > 0)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
+      .filter(([, count]) => count > 0)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
 
     if (utenti.length === 0) {
-        return await client.sendMessage(m.jid, { text: "Nessuno ha scritto questa settimana 😴" });
+      return await client.sendMessage(m.jid, { text: 'Nessuno ha scritto questa settimana 😴' });
     }
 
-    let testo = "📅 *Top 5 della settimana:*\n";
+    let testo = '📅 *Top 5 della settimana:*\n';
     utenti.forEach(([id, count], i) => {
-        testo += `${i + 1}. @${id.split("@")[0]} – ${count} messaggi\n`;
+      testo += `${i + 1}. @${id.split('@')[0]} – ${count} messaggi\n`;
     });
 
-    await client.sendMessage(m.jid, { text: testo, mentions: utenti.map(([id]) => id) });
-});
+    await client.sendMessage(m.jid, {
+      text: testo,
+      mentions: utenti.map(([id]) => id)
+    });
+  }
+);
