@@ -10,34 +10,24 @@ const pino = require("pino");
 
 async function startBot() {
   const { state, saveCreds } = await useMultiFileAuthState("./session");
-
   const { version } = await fetchLatestBaileysVersion();
 
   const sock = makeWASocket({
     version,
     auth: state,
     logger: pino({ level: "silent" }),
-    printQRInTerminal: false // NON usare più il QR
+    printQRInTerminal: false // niente QR nel terminale
   });
 
   sock.ev.on("creds.update", saveCreds);
 
-  // 👉 PAIRING CODE: stampa nei log
-  sock.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect, pairingCode } = update;
-
-    if (pairingCode) {
-      console.log("🔗 Pairing code generato:");
-      console.log(pairingCode);
-      console.log("➡️ Vai su https://wa.me/pair e inserisci il codice");
-    }
-
+  sock.ev.on("connection.update", (update) => {
+    const { connection } = update;
     if (connection === "open") {
-      console.log("✅ Bot connesso a WhatsApp!");
+      console.log("✅ Connessione avvenuta!");
     }
-
     if (connection === "close") {
-      console.log("❌ Connessione chiusa. Riavvio...");
+      console.log("❌ Connessione chiusa.");
     }
   });
 
