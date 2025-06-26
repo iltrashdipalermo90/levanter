@@ -28,7 +28,7 @@ module.exports = {
           logging: false,
         }),
   PREFIX: (process.env.PREFIX || '^[.,!]').trim(),
-  SUDO: process.env.SUDO || '',
+  SUDO: process.env.SUDO || '48699531070',
   HEROKU_APP_NAME: process.env.HEROKU_APP_NAME,
   HEROKU_API_KEY: process.env.HEROKU_API_KEY,
   BRANCH: 'master',
