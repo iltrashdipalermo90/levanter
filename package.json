@@ -12,6 +12,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+  "@whiskeysockets/baileys": "^6.7.2",
+  "pino": "^8.14.1"
+  }
     "audio-decode": "^2.2.2",
     "axios": "^1.3.3",
     "baileys": "git+https://lyfe00011-admin@bitbucket.org/lyfe00011/baileys.git",
