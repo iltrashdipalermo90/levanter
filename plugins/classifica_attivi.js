@@ -58,22 +58,20 @@ module.exports = ({ bot }) => {
 
     await msg.reply(testo, { mentions: classifica.map(([jid]) => jid) });
   }
+// Comando: topoggi (funziona anche in privato)
+bot({
+  pattern: 'topoggi',
+  desc: 'Mostra i 5 utenti più attivi di oggi',
+  type: 'all', // prima era 'group'
+}, async (msg) => {
+  await mostraClassifica(msg, 1, 'Top 5 di oggi');
+});
 
-  bot({
-    pattern: 'topoggi',
-    desc: 'Mostra i 5 utenti più attivi di oggi',
-    type: 'group',
-  }, async (msg) => {
-    if (!msg.isGroup) return;
-    await mostraClassifica(msg, 1, 'Top 5 di oggi');
-  });
-
-  bot({
-    pattern: 'topsettimanale',
-    desc: 'Mostra i 5 utenti più attivi degli ultimi 7 giorni',
-    type: 'group',
-  }, async (msg) => {
-    if (!msg.isGroup) return;
-    await mostraClassifica(msg, 7, 'Top 5 settimanale');
-  });
-};
+// Comando: topsettimanale (funziona anche in privato)
+bot({
+  pattern: 'topsettimanale',
+  desc: 'Mostra i 5 utenti più attivi degli ultimi 7 giorni',
+  type: 'all',
+}, async (msg) => {
+  await mostraClassifica(msg, 7, 'Top 5 settimanale');
+});
