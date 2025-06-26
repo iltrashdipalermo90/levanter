@@ -1,12 +1,9 @@
-FROM quay.io/lyfe00011/md:beta
+FROM node:18
 
-# ✅ Clona la tua repo, NON quella di lyfe00011
-RUN git clone https://github.com/iltrashdipalermo90/levanter.git /root/LyFE/
+WORKDIR /app
 
-WORKDIR /root/LyFE/
+COPY . .
 
-# 📦 Installa dipendenze
 RUN yarn install
 
-# ▶️ Avvia il bot
 CMD ["npm", "start"]
