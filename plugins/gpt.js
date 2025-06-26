@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios from 'axios'
 
-let handler = async (m, { text, conn }) => {
-  if (!text) return m.reply("❌ Scrivi una domanda dopo il comando.\nEsempio: .gpt Chi ha scritto Harry Potter?");
-  
+let handler = async (m, { text }) => {
+  if (!text) return m.reply("❌ Scrivi una domanda dopo il comando.\nEsempio: .gpt Qual è la capitale d’Italia?")
+
   try {
-    const openaiKey = "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"; // METTI QUI LA TUA API KEY
+    const openaiKey = process.env.OPENAI_API_KEY
 
     const res = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -16,23 +16,23 @@ let handler = async (m, { text, conn }) => {
       },
       {
         headers: {
-          "Authorization": `Bearer ${openaiKey}`,
+          Authorization: `Bearer ${openaiKey}`,
           "Content-Type": "application/json"
         }
       }
-    );
+    )
 
-    const risposta = res.data.choices[0].message.content.trim();
-    m.reply(risposta);
+    const risposta = res.data.choices[0].message.content.trim()
+    m.reply(risposta)
 
-  } catch (e) {
-    console.error(e);
-    m.reply("⚠️ Errore durante la richiesta a GPT.");
+  } catch (err) {
+    console.error(err?.response?.data || err)
+    m.reply("⚠️ Errore durante la richiesta a GPT. Controlla la tua chiave.")
   }
-};
+}
 
-handler.help = ["gpt"].map(v => "." + v);
-handler.tags = ["ai"];
-handler.command = /^gpt$/i;
+handler.help = ['gpt']
+handler.tags = ['ai']
+handler.command = /^gpt$/i
 
-export default handler;
+export default handler
